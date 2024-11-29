@@ -3,14 +3,14 @@ variable "domain" {
 }
 
 variable "values" {
-  type = object({ 
+  type = object({
     records = map(list(object({
-        name = string
-        value = string
+      name  = string
+      value = string
     }))),
     atproto = list(object({
-        handle = string
-        did = string
+      handle = string
+      did    = string
     }))
   })
 }

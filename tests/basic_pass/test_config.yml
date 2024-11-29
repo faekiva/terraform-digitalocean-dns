@@ -4,7 +4,7 @@ records:
   A:
     - name: "@"
       value: '127.0.0.1'
-    - name: "boop.example.com"
+    - name: "boop.anexample.com"
       value: "8.8.8.8"
   TXT:
     - name: '@'
@@ -18,8 +18,8 @@ records:
       value: 'google.com'
 
 atproto:
-  - handle: "@example.com"
+  - handle: "@anexample.com"
     did: "did=did:plc:lodvu673l7mrw3tyevt7vl4e"
-  - handle: "beingthecowboy.example.com"
+  - handle: "beingthecowboy.anexample.com"
     did: "did:plc:mgirdry3xewuqjnknhkxxphd"
   

@@ -4,6 +4,6 @@ locals {
 
 module "example_dns" {
     source = "../.."
-    domain = "example.com"
+    domain = "anexample.com"
     values = local.val
 }
