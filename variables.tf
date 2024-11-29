@@ -7,7 +7,6 @@ variable "values" {
     records = map(list(object({
         name = string
         value = string
-        ttl = string
     }))),
     atproto = list(object({
         handle = string

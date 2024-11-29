@@ -1,5 +1,5 @@
 locals {
-    val = yamldecode("test_config.yml")
+    val = yamldecode(file("./tests/basic_pass/test_config.yml"))
 }
 
 module "example_dns" {
