@@ -4,15 +4,21 @@ variable "domain" {
 
 variable "values" {
   type = object({
-    records = map(list(object({
+    records = optional(map(list(object({
       name  = string
       value = string
-    }))),
-    atproto = list(object({
+      ttl = optional(number, -1)
+    }))), {}),
+    atproto = optional(list(object({
       handle = string
       did    = string
-    }))
+    })), [])
   })
+}
+
+variable "default_ttl" {
+    type = number
+    default = 1799
 }
 
 output "records" {

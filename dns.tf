@@ -9,12 +9,29 @@ locals {
         type  = typeKey
         name  = trimsuffix(trimsuffix(record.name, "${var.domain}"), ".") == "" ? "@" : trimsuffix(trimsuffix(record.name, "${var.domain}"), ".")
         value = typeKey == "CNAME" ? "${trimsuffix(record.value, ".")}." : record.value
-        ttl   = try(record.ttl, null)
+        ttl   = record.ttl
       }
     ]
   ]))
-  records = { for record in local.records_tmp : (length("${record.type} | ${record.name} | ${record.value}") > 64 ? base64sha256("${record.type} | ${record.name} | ${record.value}") : "${record.type} | ${record.name} | ${record.value}") => record }
-  atproto = { for record in var.values.atproto : record.handle => record }
+  records_ttl_mapping = {for record in local.records_tmp: record.name => record.ttl if record.ttl != -1}
+  records_with_mapped_ttl = [for record in local.records_tmp: {
+    type = record.type
+    name = record.name
+    value = record.value
+    ttl = lookup(local.records_ttl_mapping, record.name, var.default_ttl)
+  }]
+  records = { for record in local.records_with_mapped_ttl : (length("${record.type} | ${record.name} | ${record.value}") > 64 ? base64sha256("${record.type} | ${record.name} | ${record.value}") : "${record.type} | ${record.name} | ${record.value}") => record }
+  atproto_tmp = [ for record in var.values.atproto : {
+    type = "TXT"
+    name     = "_atproto${trimprefix(trimsuffix(record.handle, var.domain), "@")}" == "_atproto" ? "_atproto" : "_atproto.${trimsuffix(trimprefix(trimsuffix(record.handle, var.domain), "@"), ".")}"
+    value    = startswith(record.did, "did=") ? record.did : "did=${record.did}"
+  } ]
+  atproto = {for record in local.atproto_tmp: trimprefix(record.value, "did=") => {
+    type = record.type
+    name = record.name
+    value = record.value
+    ttl = lookup(local.records_ttl_mapping, record.name, var.default_ttl)
+  }}
 }
 
 resource "digitalocean_record" "records" {
@@ -29,7 +46,8 @@ resource "digitalocean_record" "records" {
 resource "digitalocean_record" "atproto" {
   for_each = local.atproto
   domain   = digitalocean_domain.domain.name
-  type     = "TXT"
-  name     = "_atproto${trimprefix(trimsuffix(each.value.handle, var.domain), "@")}" == "_atproto" ? "_atproto" : "_atproto.${trimsuffix(trimprefix(trimsuffix(each.value.handle, var.domain), "@"), ".")}"
-  value    = startswith(each.value.did, "did=") ? each.value.did : "did=${each.value.did}"
+  type     = each.value.type
+  name     = each.value.name
+  value    = each.value.value
+  ttl      = each.value.ttl
 }

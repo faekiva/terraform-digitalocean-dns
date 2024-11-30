@@ -22,4 +22,6 @@ atproto:
     did: "did=did:plc:lodvu673l7mrw3tyevt7vl4e"
   - handle: "beingthecowboy.anexample.com"
     did: "did:plc:mgirdry3xewuqjnknhkxxphd"
+  - handle: "@me.anexample.com"
+    did: "did:plc:eeeeeeeeeeeeeeeeeeeeeeee"
   

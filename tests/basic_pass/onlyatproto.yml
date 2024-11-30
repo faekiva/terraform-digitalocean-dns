@@ -1,0 +1,10 @@
+# # yaml-language-server: $schema=https://my.url.to/the/schema
+
+atproto:
+  - handle: "@anexample3.com"
+    did: "did=did:plc:lodvu673l7mrw3tyevt7vl4e"
+  - handle: "beingthecowboy.anexample3.com"
+    did: "did:plc:mgirdry3xewuqjnknhkxxphd"
+  - handle: "@me.anexample3.com"
+    did: "did:plc:eeeeeeeeeeeeeeeeeeeeeeee"
+  
