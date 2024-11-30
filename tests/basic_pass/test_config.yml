@@ -1,5 +1,7 @@
 # # yaml-language-server: $schema=https://my.url.to/the/schema
 
+domain: anexample.com
+
 records:
   A:
     - name: "@"

@@ -1,9 +1,6 @@
-variable "domain" {
-  type = string
-}
-
 variable "values" {
   type = object({
+    domain = string
     records = optional(map(list(object({
       name  = string
       value = string

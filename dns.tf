@@ -1,13 +1,10 @@
-resource "digitalocean_domain" "domain" {
-  name = var.domain
-}
-
 locals {
+  domain = var.values.domain
   records_tmp = toset(flatten([
     for typeKey, type in var.values.records : [
       for record in type : {
         type  = typeKey
-        name  = trimsuffix(trimsuffix(record.name, "${var.domain}"), ".") == "" ? "@" : trimsuffix(trimsuffix(record.name, "${var.domain}"), ".")
+        name  = trimsuffix(trimsuffix(record.name, "${local.domain}"), ".") == "" ? "@" : trimsuffix(trimsuffix(record.name, "${local.domain}"), ".")
         value = typeKey == "CNAME" ? "${trimsuffix(record.value, ".")}." : record.value
         ttl   = record.ttl
       }
@@ -23,7 +20,7 @@ locals {
   records = { for record in local.records_with_mapped_ttl : (length("${record.type} | ${record.name} | ${record.value}") > 64 ? base64sha256("${record.type} | ${record.name} | ${record.value}") : "${record.type} | ${record.name} | ${record.value}") => record }
   atproto_tmp = [ for record in var.values.atproto : {
     type = "TXT"
-    name     = "_atproto${trimprefix(trimsuffix(record.handle, var.domain), "@")}" == "_atproto" ? "_atproto" : "_atproto.${trimsuffix(trimprefix(trimsuffix(record.handle, var.domain), "@"), ".")}"
+    name     = "_atproto${trimprefix(trimsuffix(record.handle, local.domain), "@")}" == "_atproto" ? "_atproto" : "_atproto.${trimsuffix(trimprefix(trimsuffix(record.handle, local.domain), "@"), ".")}"
     value    = startswith(record.did, "did=") ? record.did : "did=${record.did}"
   } ]
   atproto = {for record in local.atproto_tmp: trimprefix(record.value, "did=") => {
@@ -32,6 +29,10 @@ locals {
     value = record.value
     ttl = lookup(local.records_ttl_mapping, record.name, var.default_ttl)
   }}
+}
+
+resource "digitalocean_domain" "domain" {
+  name = local.domain
 }
 
 resource "digitalocean_record" "records" {

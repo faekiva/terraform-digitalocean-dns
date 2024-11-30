@@ -6,18 +6,15 @@ locals {
 
 module "example_dns" {
     source = "../.."
-    domain = "anexample.com"
     values = local.val
 }
 
 module "noatproto" {
     source = "../.."
-    domain = "anexample2.com"
     values = local.noatproto
 }
 
 module "onlyatproto" {
     source = "../.."
-    domain = "anexample3.com"
     values = local.onlyatproto
 }
