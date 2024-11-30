@@ -1,0 +1,40 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://schema.leftist.gay/json/terraform-dns-v1.json",
+    "title": "DNS Records",
+    "description": "Input object containing DNS information to be parsed from a file into terraform.",
+    "type": "object",
+    "properties": {
+      "domain": {
+        "description": "The domain you're setting up dns for",
+        "type": "string"
+      },
+      "productName": {
+        "description": "Name of the product",
+        "type": "string"
+      },
+      "price": {
+        "description": "The price of the product",
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "atproto": {
+        "description": "Information to create atproto handle verification records",
+        "type": "array",
+        "items": {
+          "handle": {
+            "type": "number"
+          },
+          "did": {
+            "type": "string",
+            "pattern": "^(?:did=){0,1}(?:(?:did:plc:[a-z2-7]{24})|(?:did:web:(?:(?!-)[A-Za-z0-9-]{1,62}[A-Za-z0-9]{0,1}\\.)+[A-Za-z]{2,6})(?::[a-zA-Z0-9\\!\\-\\_\\*\\~\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\.\\@]*)*(?:%3A(?:(?:[1-9][0-9]{0,3})|(?:[1-5][0-9]{4})|(?:6[0-4][0-9]{3})|(?:65[0-4][0-9]{2})|(?:655[0-2][0-9])|(?:6553[0-5]))){0,1})$"
+          }
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "required": [ "domain" ]
+  }
+  
+  
