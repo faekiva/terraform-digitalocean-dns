@@ -1,0 +1,24 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  TF_COMMAND:
+    sh: |
+      command -v tofu &>/dev/null && echo "tofu" || echo "terraform"
+
+tasks:
+  default:
+    deps:
+      - test
+      - generate-docs
+  test:
+    cmds:
+      - "{{.TF_COMMAND}} init >/dev/null" # any errors will still be shown
+      - "{{.TF_COMMAND}} test"
+  generate-docs:
+    cmds:
+      - terraform-docs markdown table --output-file README.md --output-mode inject .
+    preconditions:
+      - sh: "command -v terraform-docs &>/dev/null"
+        msg: "requires https://github.com/terraform-docs/terraform-docs"
