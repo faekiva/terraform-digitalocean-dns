@@ -4,6 +4,7 @@ records:
   A:
     - name: "@"
       value: '127.0.0.1'
+      ttl: 9001
     - name: "boop.anexample.com"
       value: "8.8.8.8"
   TXT:
