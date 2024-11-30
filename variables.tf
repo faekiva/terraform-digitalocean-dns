@@ -19,18 +19,3 @@ variable "default_ttl" {
     type = number
     default = 1799
 }
-
-output "domain" {
-  description = "the domain resource"
-  value = digitalocean_domain.domain
-}
-
-output "records" {
-    description = "the non-atproto domain records resources"
-    value = digitalocean_record.records
-}
-
-output "atproto" {
-    description = "the atproto domain record resources"
-    value = digitalocean_record.atproto
-}
