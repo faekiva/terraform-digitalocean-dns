@@ -1,0 +1,1 @@
+You can easily point the module at a folder full of yaml files containing the requisite values and let it create resources for each of them. Using `jsondecode` instead of `yamldecode` would be good for use cases where the records are being generated programmatically.
