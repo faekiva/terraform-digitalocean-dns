@@ -33,15 +33,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_default_ttl"></a> [default\_ttl](#input\_default\_ttl) | n/a | `number` | `1799` | no |
-| <a name="input_values"></a> [values](#input\_values) | n/a | <pre>object({<br/>    domain = string<br/>    records = optional(map(list(object({<br/>      name  = string<br/>      value = string<br/>      ttl = optional(number, -1)<br/>    }))), {}),<br/>    atproto = optional(list(object({<br/>      handle = string<br/>      did    = string<br/>    })), [])<br/>  })</pre> | n/a | yes |
+| <a name="input_default_ttl"></a> [default\_ttl](#input\_default\_ttl) | Default TTL value. DNS requires a TTL value to be the same across records with the same FQDN, so this is used for all records on any FQDN where none of the records has a specified TTL. | `number` | `1799` | no |
+| <a name="input_values"></a> [values](#input\_values) | information about the domain and records to be created. | <pre>object({<br/>    domain = string<br/>    records = optional(map(list(object({<br/>      name  = string<br/>      value = string<br/>      ttl = optional(number, -1)<br/>    }))), {}),<br/>    atproto = optional(list(object({<br/>      handle = string<br/>      did    = string<br/>    })), [])<br/>  })</pre> | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_atproto"></a> [atproto](#output\_atproto) | n/a |
-| <a name="output_records"></a> [records](#output\_records) | n/a |
+| <a name="output_atproto"></a> [atproto](#output\_atproto) | the atproto domain record resources |
+| <a name="output_domain"></a> [domain](#output\_domain) | the domain resource |
+| <a name="output_records"></a> [records](#output\_records) | the non-atproto domain records resources |
 <!-- END_TF_DOCS -->
 
 ## TODOs
