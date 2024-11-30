@@ -1,0 +1,20 @@
+# # yaml-language-server: $schema=https://my.url.to/the/schema
+
+records:
+  A:
+    - name: "@"
+      value: '127.0.0.1'
+      ttl: 9001
+    - name: "boop.anexample2.com"
+      value: "8.8.8.8"
+  TXT:
+    - name: '@'
+      value: "v=spf1 include:spf.messagingengine.com ?all" 
+    - name: 'api'
+      value: "127.0.0.1"
+  CNAME:
+    - name: 'wow'
+      value: 'google.com.'
+    - name: 'wee'
+      value: 'google.com'
+  

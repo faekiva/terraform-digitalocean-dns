@@ -14,3 +14,11 @@ variable "values" {
     }))
   })
 }
+
+output "records" {
+    value = digitalocean_record.records
+}
+
+output "atproto" {
+    value = digitalocean_record.atproto
+}

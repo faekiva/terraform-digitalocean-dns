@@ -30,6 +30,6 @@ resource "digitalocean_record" "atproto" {
   for_each = local.atproto
   domain   = digitalocean_domain.domain.name
   type     = "TXT"
-  name     = trimprefix(trimsuffix(each.value.handle, var.domain), "@") == "" ? "@" : trimprefix(trimsuffix(each.value.handle, var.domain), "@")
+  name     = "_atproto${trimprefix(trimsuffix(each.value.handle, var.domain), "@")}" == "_atproto" ? "_atproto" : "_atproto.${trimsuffix(trimprefix(trimsuffix(each.value.handle, var.domain), "@"), ".")}"
   value    = startswith(each.value.did, "did=") ? each.value.did : "did=${each.value.did}"
 }
