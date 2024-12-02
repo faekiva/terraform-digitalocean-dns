@@ -75,4 +75,12 @@ run "basic_pass" {
         condition = length(module.dns["onlyatproto.yml"].records) == 0
         error_message = "non atproto records created unepectedly for onlyatproto"
     }
+
+    assert {
+        condition = anytrue([
+            for record in [module.dns["test_config.yml"].records["MX | beep | in1-smtp.messagingengine.com."]]: record.type == "MX" &&
+             record.name == "beep" && record.value == "in1-smtp.messagingengine.com." && record.priority == 20
+        ])
+        error_message = "A record 'beep' incorrect. TYPE = ${module.dns["test_config.yml"].records["MX | beep | in1-smtp.messagingengine.com."].type} | NAME = ${module.dns["test_config.yml"].records["MX | beep | in1-smtp.messagingengine.com."].name} | VALUE = ${module.dns["test_config.yml"].records["MX | beep | in1-smtp.messagingengine.com."].value} | Priority = ${module.dns["test_config.yml"].records["MX | beep | in1-smtp.messagingengine.com."].priority}"
+    }
 }

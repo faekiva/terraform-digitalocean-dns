@@ -19,6 +19,10 @@ records:
       value: 'google.com.'
     - name: 'wee'
       value: 'google.com'
+  MX:
+    - name: "beep"
+      value: "in1-smtp.messagingengine.com."
+      priority: 20
 
 atproto:
   - handle: "@anexample.com"
