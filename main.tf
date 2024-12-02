@@ -5,8 +5,9 @@ locals {
       for record in type : {
         type  = typeKey
         name  = trimsuffix(trimsuffix(record.name, "${local.domain}"), ".") == "" ? "@" : trimsuffix(trimsuffix(record.name, "${local.domain}"), ".")
-        value = typeKey == "CNAME" ? "${trimsuffix(record.value, ".")}." : record.value
+        value = (typeKey == "CNAME" || typeKey == "MX") ? "${trimsuffix(record.value, ".")}." : record.value
         ttl   = record.ttl
+        priority = record.priority
       }
     ]
   ]))
@@ -16,6 +17,7 @@ locals {
     name = record.name
     value = record.value
     ttl = lookup(local.records_ttl_mapping, record.name, var.default_ttl)
+    priority = record.priority
   }]
   records = { for record in local.records_with_mapped_ttl : (length("${record.type} | ${record.name} | ${record.value}") > 64 ? base64sha256("${record.type} | ${record.name} | ${record.value}") : "${record.type} | ${record.name} | ${record.value}") => record }
   atproto_tmp = [ for record in var.values.atproto : {
@@ -42,6 +44,7 @@ resource "digitalocean_record" "records" {
   name     = each.value.name
   value    = each.value.value
   ttl      = each.value.ttl
+  priority = each.value.priority
 }
 
 resource "digitalocean_record" "atproto" {

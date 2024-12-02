@@ -6,6 +6,7 @@ variable "values" {
       name  = string
       value = string
       ttl = optional(number, -1)
+      priority = optional(number)
     }))), {}),
     atproto = optional(list(object({
       handle = string
