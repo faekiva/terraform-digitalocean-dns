@@ -29,7 +29,8 @@ export const DomainRecordsSchema = (()=> {
         "type": z.string(),
         ...domainRecordTypeless
     }))}).transform(o => {
-        return o.domain_records.filter(o => o.type in terraformCompatibleRecordTypes)
+        const records = o.domain_records.filter(record => terraformCompatibleRecordTypes.includes(record.type as ArrayElement<typeof terraformCompatibleRecordTypes>))
+        return records
     }).pipe(
         z.array(z.object({
             "type": z.enum(terraformCompatibleRecordTypes),

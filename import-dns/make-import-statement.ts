@@ -1,5 +1,5 @@
 import { $ } from "npm:zx@8.3.0";
-import type {Result }  from "./result.ts";
+import type {AsyncResult }  from "./result.ts";
 import { Try } from "./result.ts";
 import { DomainRecord, Flags } from "./types.ts";
 
@@ -13,7 +13,7 @@ async function commandExists(command: string) {
   return result.exitCode === 0;
 }
 
-async function getTofuOrTerraform(): Promise<Result<string>> {
+async function getTofuOrTerraform(): AsyncResult<string> {
   for (const command of ["tofu", "terraform"]) {
     if (await commandExists(command)) {
       return command;
@@ -22,16 +22,10 @@ async function getTofuOrTerraform(): Promise<Result<string>> {
   return ErrTofuOrTerraformNotFound;
 }
 
-async function makeKey(
-  record: DomainRecord,
+async function compressKey(
+  uncompressed: string,
   command: string
-): Promise<Result<string>> {
-  const uncompressed = `${record.type} | ${record.name} | ${record.data}`;
-
-  if (uncompressed.length <= 64) {
-    return uncompressed;
-  }
-
+): AsyncResult<string> {
   const retVal = await Try(async () => {
     await $`${command} apply -var getHashed=${uncompressed}`;
     const hashedOutputResult = await $`${command} output hashed`;
@@ -46,10 +40,22 @@ async function makeKey(
   }
   return retVal;
 }
-export async function makeImportStatement(args: Flags, record: DomainRecord) {
+export async function makeImportStatement(args: Flags, record: DomainRecord): AsyncResult<string> {
   const command = await getTofuOrTerraform();
   if (command instanceof Error) {
     return command;
   }
-  return `${command} import ${args.rootResource}.digitalocean_record.records["${makeKey(record, command)}"] ${args.domain},${record.id}`;
+  const uncompressed = `${record.type} | ${record.name} | ${record.data}`;
+  
+  let keyUsed = uncompressed
+  if (uncompressed.length > 64) {
+    const compressionResult = await compressKey(uncompressed, command)
+    if (compressionResult instanceof Error) {
+      return compressionResult
+    }
+    keyUsed = compressionResult
+  }
+
+
+  return `${command} import ${args.rootResource}.digitalocean_record.records["${keyUsed}"] ${args.domain},${record.id} || echo import failed for ${uncompressed}`;
 }

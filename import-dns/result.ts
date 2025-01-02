@@ -1,4 +1,5 @@
 export type Result<T> = Error | T;
+export type AsyncResult<T> = Promise<Result<T>>
 type NotError<T> = Exclude<T, Error>;
 export type ArrayElement<T> = T extends (infer U)[] ? U : never;
 

@@ -8,6 +8,7 @@ async function getDomainRecords(args: Flags) {
         `https://api.digitalocean.com/v2/domains/${args.domain}/records`;
 
     while (next) {
+        console.log(next)
         const response = await fetch(
             next,
             {
@@ -17,7 +18,9 @@ async function getDomainRecords(args: Flags) {
             },
         );
         const responseJson = await response.json();
-        output.push(...DomainRecordsSchema.parse(responseJson));
+        const domainRecords = DomainRecordsSchema.parse(responseJson)
+        console.log(domainRecords)
+        output.push(...domainRecords);
         next = NextLink.parse(responseJson);
     }
 
@@ -25,8 +28,15 @@ async function getDomainRecords(args: Flags) {
 }
 
 export async function main(args: Flags) {
+    console.log("here")
     const domainRecords = await getDomainRecords(args);
+    console.log(domainRecords)
     for (const record of domainRecords) {
-        makeImportStatement(args, record);
+        const statement = await makeImportStatement(args, record);
+        if (statement instanceof Error) {
+            throw statement
+        }
+        console.log(statement)
     }
+    console.log("done")
 }
