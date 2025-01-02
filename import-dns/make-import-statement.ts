@@ -2,6 +2,8 @@ import { $ } from "npm:zx@8.3.0";
 import {Try, type AsyncResult }  from "./result.ts";
 import { DomainRecord, Flags } from "./types.ts";
 import { base64sha256 } from "./utils.ts";
+import { IP } from "jsr:@badrap/ipv46@2.2.3";
+
 
 const ErrTofuOrTerraformNotFound = new Error(
   "tofu or terraform required to be installed to parse this."
@@ -23,7 +25,7 @@ async function getTofuOrTerraform(): AsyncResult<string> {
 
 function parseData(record: DomainRecord){
   const withDotIfURL = Try(()=> {
-    if (!record.data.endsWith(".")) {
+    if (!record.data.endsWith(".") && !IP.parse(record.data)) {
       let data = record.data
       if (!data.includes("://")) {
         data = "https://"+data

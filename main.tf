@@ -11,12 +11,12 @@ locals {
       }
     ]
   ]))
-  records_ttl_mapping = {for record in local.records_tmp: record.name => record.ttl if record.ttl != -1}
+  records_ttl_mapping = {for record in local.records_tmp: "${record.type} | ${record.name}" => record.ttl if record.ttl != -1}
   records_with_mapped_ttl = [for record in local.records_tmp: {
     type = record.type
     name = record.name
     value = record.value
-    ttl = lookup(local.records_ttl_mapping, record.name, var.default_ttl)
+    ttl = lookup(local.records_ttl_mapping, "${record.type} | ${record.name}", var.default_ttl)
     priority = record.priority
   }]
   records = { for record in local.records_with_mapped_ttl : (length("${record.type} | ${record.name} | ${record.value}") > 64 ? base64sha256("${record.type} | ${record.name} | ${record.value}") : "${record.type} | ${record.name} | ${record.value}") => record }
