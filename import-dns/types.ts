@@ -4,11 +4,13 @@ import type {ArrayElement} from "./result.ts"
 
 export const FlagsSchema = z.object({
     domain: z.string(),
-    "root-resource": z.string()
-}).strict().transform(o => {
+    "root-resource": z.string().nonempty(),
+    "digital-ocean-api-key": z.string()
+}).transform(o => {
     return {
         "domain": o.domain,
-        "rootResource": o["root-resource"]
+        "rootResource": o["root-resource"],
+        "digitalOceanApiKey": o["digital-ocean-api-key"]
     }
 })
 
@@ -16,7 +18,6 @@ export type Flags = z.output<typeof FlagsSchema>
 
 export const DomainRecordsSchema = (()=> {
     const terraformCompatibleRecordTypes = ["A", "AAAA", "CAA", "CNAME", "MX", "NS", "SRV", "TXT"] as const;
-    // type TerraformCompatibleRecordType =  typeof terraformCompatibleRecordTypes[number]
     const domainRecordTypeless =
         {
             "id": z.number(),
