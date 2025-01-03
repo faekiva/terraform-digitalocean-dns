@@ -1,6 +1,6 @@
 # terraform-digitalocean-dns
 
-An easier way to manage digitalocean dns through terraform. Designed to take in its values via a single yaml or JSON file to allow for easier programmability and DRYer syntax. See [here](./tests/basic_pass/test_config.yml) for an example.
+An easier way to manage digitalocean dns through terraform. Designed to take in its values via a single yaml or JSON file to allow for easier programmability and DRYer syntax. See [here](./examples/basic_usage/dns/test_config.yml) for an example.
 
 Syntactic sugar is available for ATProto identifier records specifically, since that's a use case I use often!
 

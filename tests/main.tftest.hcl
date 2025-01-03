@@ -46,7 +46,7 @@ run "basic_pass" {
     assert {
         condition = anytrue([
             for record in module.dns["test_config.yml"].records: record.type == "TXT" &&
-             record.name == "@" && record.value == "v=spf1 include:spf.messagingengine.com ?all" && record.ttl == 9001
+             record.name == "@" && record.value == "v=spf1 include:spf.messagingengine.com ?all" && record.ttl == 600
         ])
         error_message = "TXT record '@' incorrect. TYPE = ${module.dns["test_config.yml"].records["TXT | @ | v=spf1 include:spf.messagingengine.com ?all"].type} | NAME = ${module.dns["test_config.yml"].records["TXT | @ | v=spf1 include:spf.messagingengine.com ?all"].name} | VALUE = ${module.dns["test_config.yml"].records["TXT | @ | v=spf1 include:spf.messagingengine.com ?all"].value} | TTL = ${module.dns["test_config.yml"].records["TXT | @ | v=spf1 include:spf.messagingengine.com ?all"].ttl}"
     }

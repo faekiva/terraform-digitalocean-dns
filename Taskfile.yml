@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   TF_COMMAND:
@@ -24,7 +24,11 @@ tasks:
         msg: "requires https://github.com/terraform-docs/terraform-docs"
   release:
     cmds:
-      - ./release.sh 
+      - ./release.sh
+      - git checkout main
+    deps:
+      - test
+      - generate-docs
     preconditions:
       - sh: "command -v gum &>/dev/null"
         msg: "requires https://github.com/charmbracelet/gum"

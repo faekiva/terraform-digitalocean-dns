@@ -5,20 +5,23 @@ domain: anexample.com
 records:
   A:
     - name: "@"
-      value: '127.0.0.1'
+      value: "127.0.0.1"
       ttl: 9001
     - name: "boop.anexample.com"
       value: "8.8.8.8"
   TXT:
-    - name: '@'
-      value: "v=spf1 include:spf.messagingengine.com ?all" 
-    - name: 'api'
+    - name: "@"
+      value: "v=spf1 include:spf.messagingengine.com ?all"
+    - name: "@"
+      value: "another in recordset"
+      ttl: 600
+    - name: "api"
       value: "127.0.0.1"
   CNAME:
-    - name: 'wow'
-      value: 'google.com.'
-    - name: 'wee'
-      value: 'google.com'
+    - name: "wow"
+      value: "google.com."
+    - name: "wee"
+      value: "google.com"
   MX:
     - name: "beep"
       value: "in1-smtp.messagingengine.com."
@@ -31,4 +34,3 @@ atproto:
     did: "did:plc:mgirdry3xewuqjnknhkxxphd"
   - handle: "@me.anexample.com"
     did: "did:plc:eeeeeeeeeeeeeeeeeeeeeeee"
-  
