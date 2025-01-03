@@ -22,3 +22,9 @@ tasks:
     preconditions:
       - sh: "command -v terraform-docs &>/dev/null"
         msg: "requires https://github.com/terraform-docs/terraform-docs"
+  release:
+    cmds:
+      - ./release.sh 
+    preconditions:
+      - sh: "command -v gum &>/dev/null"
+        msg: "requires https://github.com/charmbracelet/gum"
